@@ -26,7 +26,7 @@ Programming language: Java.
 
 Due to the time constraints of this assignment and the need for a straightforward project setup for evaluation, libraries required by the project (JUnit for testing) are currently included directly in the `lib/` directory. Under normal circumstances, it would be preferable to manage these dependencies through a build tool like Maven or Gradle.
 
-### Future Improvements
+## Future Improvements
 
 - **Implement Dependency Management**: Post-assignment, plan to transition to using Maven or Gradle for dependency management. This will not only automate the management of library versions and dependencies but also align the project with standard Java project practices.
 - **Remove Direct Library Inclusions**: Once a proper dependency management tool is configured, the libraries will be removed from the `lib/` directory and managed exclusively through the build tool's configuration files.
