@@ -6,6 +6,14 @@ Goal: Implementation of an in-memory data structure that acts as a cache.
 
 Programming language: Java.
 
+## Project Structure
+
+- `src/main/java/cache/`: Contains the source files for the LFU cache implementation.
+- `src/test/java/cache/`: Contains all JUnit test cases for testing the cache functionality.
+- `bin/`: Directory for compiled bytecode files.
+- `lib/`: Contains any libraries the project uses (if applicable).
+- `README.md`: Provides the project overview, setup, design decisions, assumptions, and usage/testing instructions.
+
 ## Implementation Details
 
 - **Methods**:
