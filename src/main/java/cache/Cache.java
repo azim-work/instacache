@@ -1,4 +1,4 @@
-package main.java.cache;
+package cache;
 
 /**
  * Interface for a generic cache.
