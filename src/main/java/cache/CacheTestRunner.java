@@ -1,4 +1,4 @@
-package cache;
+package main.java.cache;
 
 /**
  * CacheTestRunner class to run tests for the LFUCache implementation.
