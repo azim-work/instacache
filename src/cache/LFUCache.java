@@ -22,18 +22,25 @@ public class LFUCache<K, V> implements Cache<K, V> {
 
     @Override
     public V get(K key) {
-        // To be implemented: Retrieve item from cache.
-        return null;
+        // Return the value for the key if it exists
+        return cache.get(key);
     }
 
     @Override
     public void put(K key, V value) {
-        // To be implemented: Insert or update an item in the cache.
+        if (cache.size() >= capacity && !cache.containsKey(key)) {
+            // Note: Implement eviction logic here
+            // Placeholder: Remove the first key
+            K firstKey = cache.keySet().iterator().next();
+            cache.remove(firstKey);
+        }
+        cache.put(key, value);
     }
 
     @Override
     public void remove(K key) {
-        // To be implemented: Remove an item from the cache by key.
+        // Remove the item from the cache by key
+        cache.remove(key);
     }
 
     @Override

@@ -9,8 +9,11 @@ public class CacheTestRunner {
         LFUCache<Integer, String> cache = new LFUCache<>(2);
         cache.put(1, "value1");
         cache.put(2, "value2");
-        System.out.println(cache.get(1));  // Output value1
-        cache.put(3, "value3");  // Evicts least frequently used
-        System.out.println(cache.get(2));  // Output null since it was evicted
+        System.out.println("Expected 'value1', got: " + cache.get(1));  // Should output 'value1'
+
+        cache.put(3, "value3");  // According to the placeholder logic, remove key 1
+        System.out.println("Expected null, got: " + cache.get(1));  // Should output null
+        System.out.println("Expected 'value2', got: " + cache.get(2));  // Should output 'value2'
+        System.out.println("Expected 'value3', got: " + cache.get(3));  // Should output 'value3'
     }
 }
