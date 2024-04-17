@@ -1,4 +1,4 @@
-# About
+## About
 
 This project is a coding assignment for the recruitment as a Software Developer at Arctic Wolf.
 
@@ -6,12 +6,25 @@ Goal: Implementation of an in-memory data structure that acts as a cache.
 
 Programming language: Java.
 
+## For the hiring manager/recuiter
+
+This README.md provides comprehensive information on the project structure, implementation details, assumptions, imporvements, etc.
+
+Quick access to source and tests:
+
+1. Source code: https://github.com/azimsb120/arctic-wolf-assignment/tree/master/src/main/java/cache
+2. Unit tests: https://github.com/azimsb120/arctic-wolf-assignment/tree/master/src/test/java/cache
+
+Quick demo of functionality:
+
+- `CacheTestRunner.java` is a very high-level demonstratation of the functionalities of the LFU cache.
+
 ## Project Structure
 
 - `src/main/java/cache/`: Contains the source files for the LFU cache implementation.
 - `src/test/java/cache/`: Contains all JUnit test cases for testing the cache functionality.
 - `bin/`: Directory for compiled bytecode files.
-- `lib/`: Contains any libraries the project uses (if applicable).
+- `lib/`: Contains JUnit libraries necessary for running the tests.
 - `README.md`: Provides the project overview, setup, design decisions, assumptions, and usage/testing instructions.
 
 ## Implementation Details
@@ -25,6 +38,18 @@ Programming language: Java.
 ### Eviction Policy
 
 The eviction policy of the LFU cache we implemented is to evict entries based on their frequency of access. When there is a tie — i.e., multiple entries have the same frequency — the cache evicts the least recently added entry first. This behavior is achieved with the help of the `LinkedHashSet<K>` data structure, which maintains the insertion order of keys. This ensures that when there are entries with same frequency, the oldest is evicted first.
+
+## Assumptions
+
+- The cache is designed for situations where access frequency is one of the main factors in data relevance
+
+## Configuration and Setup
+
+To set up and run this project:
+
+1. Ensure Java 11 or higher is installed.
+2. Compile the source code using `javac` or an IDE that supports Java.
+3. Run tests using the command: `java -cp lib/junit.jar:. org.junit.runner.JUnitCore cache.CacheTest`
 
 ## Library Management
 
@@ -43,6 +68,10 @@ These challenges suggest that a more effective cache implementation may be integ
 **Refined Tie-Breaking in Eviction Policy**
 
 The current implementation of the eviction policy in case of a tie looks at the order of insertion. However, this approach may not accurately reflect the recency of usage of keys with the same frequency. As an improvement, we could implement an explicit tie-breaker using Least Recently Used (LRU) principles; i.e., the key with the least recent usage would be removed first. We would track access timestamps to accomplish this, effectively ensuring that the cache consistently retains the most relevant data.
+
+**Concurrency**
+
+The LFUCache we implemented assumes non-concurrent usage patterns. Multi-threading can be implemented for for high-concurrency usage.
 
 - **Implement Dependency Management**: Post-assignment, plan to transition to using Maven or Gradle for dependency management. This will not only automate the management of library versions and dependencies but also align the project with standard Java project practices.
 - **Remove Direct Library Inclusions**: Once a proper dependency management tool is configured, the libraries will be removed from the `lib/` directory and managed exclusively through the build tool's configuration files.
