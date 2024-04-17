@@ -40,6 +40,7 @@ public class CacheTestRunner {
         System.out.println("Token for Guest (should be null): " + cache.get(2));
         System.out.println("Token for Manager (should be null): " + cache.get(3));
         System.out.println("Token for Developer (should be null): " + cache.get(4));
+        System.out.println("Size should be 0: " + cache.size());
 
         System.out.println("\nAttempting to initialize cache with negative capacity...");
         try {
