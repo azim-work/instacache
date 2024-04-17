@@ -94,9 +94,8 @@ public class LFUCache<K, V> implements Cache<K, V> {
             minFrequency++;
         }
 
-        // Increment the frequency count of the entry and add it to the appropriate frequency set
-        entry.frequency++;
-        addToFrequencyMap(entry.key, entry.frequency); // Reuse addToFrequencyMap to handle frequency set updates
+        entry.frequency++; // Increment the frequency count of the entry
+        addToFrequencyMap(entry.key, entry.frequency); // Add it to its new frequency set
     }
 
     @Override
