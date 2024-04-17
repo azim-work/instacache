@@ -112,8 +112,18 @@ public class LFUCache<K, V> implements Cache<K, V> {
         // If set is now empty, no keys have this frequency
         if (leastFreqKeys.isEmpty()) {
             frequencies.remove(minFrequency); // So, remove this set
-            // TODO: find the next minFrequency if needed
+            // Find the next minimum frequency
+            minFrequency = findNextMinFrequency();
         }
+    }
+
+    private int findNextMinFrequency() {
+        for (Integer freq : frequencies.keySet()) {
+            if (!frequencies.get(freq).isEmpty()) {
+                return freq;
+            }
+        }
+        return -1; // A valid minimum frequency was not found
     }
 
     @Override
