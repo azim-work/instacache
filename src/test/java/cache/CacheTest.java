@@ -79,6 +79,23 @@ public class CacheTest {
         assertNotNull("User6's data should be added", cache.get(6));
     }
 
+    /* Test Frequency Management */
+    @Test
+    public void shouldCorrectlyIncrementFrequencyOnGet() {
+        cache.put(201, "User201:Data");
+        // Frequency should be 3 for User201 after 1 put and 2 get calls
+        cache.get(201);
+        cache.get(201);
+        // Add more items, so capacity is reached, and an entry is evicted
+        cache.put(202, "User202:Data");
+        cache.put(203, "User203:Data");
+
+        // User201's data should not be evicted
+        assertNotNull("Data201 should not be evicted, as it has higher frequency", cache.get(201));
+        // User202's data, although more recent than User 201's data, should evicted
+        assertNull("Data202 should be evicted as it has the least frequency", cache.get(202));
+    }
+
     // Test for an edge case
     @Test
     public void shouldHandleNullValuesInserted() {
