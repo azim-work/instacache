@@ -6,18 +6,18 @@ Goal: Implementation of an in-memory data structure that acts as a cache.
 
 Programming language: Java.
 
-## For the hiring manager/recuiter
+## For the Hiring Manager/Recruiter
 
 This README.md provides comprehensive information on the project structure, implementation details, assumptions, imporvements, etc.
 
 Quick access to source and tests:
 
-1. Source code: https://github.com/azimsb120/arctic-wolf-assignment/tree/master/src/main/java/cache
-2. Unit tests: https://github.com/azimsb120/arctic-wolf-assignment/tree/master/src/test/java/cache
+1. Source code: [LFU Cache Implementation](https://github.com/azimsb120/arctic-wolf-assignment/tree/master/src/main/java/cache)
+2. Unit tests: [Cache Tests](https://github.com/azimsb120/arctic-wolf-assignment/tree/master/src/test/java/cache)
 
 Quick demo of functionality:
 
-- `CacheTestRunner.java` is a very high-level demonstratation of the functionalities of the LFU cache.
+- `CacheTestRunner.java` offers a high-level demonstration of the functionalities of the LFU cache, showcasing how entries are managed and evicted based on access frequency.
 
 ## Project Structure
 
