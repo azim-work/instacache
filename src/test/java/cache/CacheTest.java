@@ -40,6 +40,16 @@ public class CacheTest {
     }
 
     @Test
+    public void shouldUpdateCacheSizeCorrectly() {
+        assertEquals("Cache size initially is 0", 0, cache.size());
+        cache.put(103, "SessionID:789DEF;User:Developer;Status:Active");
+        cache.put(104, "SessionID:101GHI;User:Analyst;Status:Inactive");
+        assertEquals("Cache should report two entries after additions", 2, cache.size());
+        cache.remove(103);
+        assertEquals("Cache should report one entry after one removal", 1, cache.size());
+    }
+
+    @Test
     public void shouldCorrectlyEvictLeastFrequentlyUsedEntry() {
         cache.put(1, "AuthToken:XYZ123;User:Admin;Permissions:Full");
         cache.put(2, "AuthToken:ABC456;User:Guest;Permissions:Read");
