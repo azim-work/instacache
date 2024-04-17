@@ -50,13 +50,33 @@ public class CacheTest {
     }
 
     @Test
-    public void shouldCorrectlyEvictLeastFrequentlyUsedEntry() {
-        cache.put(1, "AuthToken:XYZ123;User:Admin;Permissions:Full");
-        cache.put(2, "AuthToken:ABC456;User:Guest;Permissions:Read");
-        cache.put(3, "AuthToken:DEF789;User:Manager;Permissions:Modify"); // Should evict key 1 based on current placeholder logic
-        assertNull("Expect null since key 1 should be evicted first", cache.get(1));
-        assertNotNull("Key 2 should not be evicted", cache.get(2));
-        assertNotNull("Key 3 should not be evicted", cache.get(3));
+    public void shouldEvictLeastFrequentlyUsedEntryOnCapacityOverflow() {
+        cache.put(1, "User1:Data");
+        cache.put(2, "User2:Data");
+        // Increase User1's data access frequency
+        cache.get(1);
+        cache.get(1);
+        // Add another entry, capacity is reached, so User2's data should be evicted
+        cache.put(3, "User3:Data");
+        // Assert User2's data was evicted
+        assertNull("User2's data should be evicted", cache.get(2));
+        assertNotNull("User1's data should remain", cache.get(1));
+        assertNotNull("User3's data should be added", cache.get(3));
+    }
+
+    // Test tie breaker - multiple entries have the same frequency
+    @Test
+    public void shouldEvictOldestEntryWhenFrequenciesAreEqual() {
+        // Bother User4 and User5 have the same frequency
+        cache.put(4, "User4:Data");
+        cache.put(5, "User5:Data");  // Both entries have frequency of 1
+
+        // Add another entry, capacity is reached, User4 should be evicted due
+        cache.put(6, "User6:Data");  // Should evict the oldest item with lowest frequency
+
+        assertNull("User4's data should be evicted", cache.get(4));
+        assertNotNull("User5's data should remain", cache.get(5));
+        assertNotNull("User6's data should be added", cache.get(6));
     }
 
     // Test for an edge case
