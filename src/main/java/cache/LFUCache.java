@@ -2,6 +2,7 @@ package cache;
 
 import java.util.Map;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 
 /**
  * LFUCache implements a least frequently used (LFU) caching strategy.
@@ -9,8 +10,9 @@ import java.util.HashMap;
  */
 public class LFUCache<K, V> implements Cache<K, V> {
     private final int capacity; // Maximum number of entries in the cache
-    private Map<K, V> cache;    // Stores cache entries
-
+    private Map<K, CacheEntry<K, V>> cache;    // Stores cache entries
+    private Map<Integer, LinkedHashSet<K>> frequencies; // Maps frequency to keys with that frequency
+    private int minFrequency; // Tracks the smallest frequency of a key in the cache
     /**
      * Constructs an LFUCache with the specified capacity.
      * @param capacity the maximum number of entries the cache can hold
@@ -18,6 +20,8 @@ public class LFUCache<K, V> implements Cache<K, V> {
     public LFUCache(int capacity) {
         this.capacity = capacity;
         this.cache = new HashMap<>();
+        this.frequencies = new HashMap<>();
+        this.minFrequency = 0;
     }
 
     @Override
