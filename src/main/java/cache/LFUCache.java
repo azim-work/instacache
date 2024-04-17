@@ -83,6 +83,22 @@ public class LFUCache<K, V> implements Cache<K, V> {
     set.add(key); // Add the key to the set for this frequency
     }
 
+    private void updateFrequency(CacheEntry<K, V> entry) {
+        // Remove the key from its current frequency set
+        int currentFreq = entry.frequency;
+        LinkedHashSet<K> currentSet = frequencies.get(currentFreq);
+        currentSet.remove(entry.key);
+
+        // Current frequency set is empty but frequency is minFrequency, so increment
+        if (currentSet.isEmpty() && currentFreq == minFrequency) {
+            minFrequency++;
+        }
+
+        // Increment the frequency count of the entry and add it to the appropriate frequency set
+        entry.frequency++;
+        addToFrequencyMap(entry.key, entry.frequency); // Reuse addToFrequencyMap to handle frequency set updates
+    }
+
     @Override
     public void remove(K key) {
         // Remove the item from the cache by key
