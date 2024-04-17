@@ -39,6 +39,10 @@ Quick demo of functionality:
 
 The eviction policy of the LFU cache we implemented is to evict entries based on their frequency of access. When there is a tie — i.e., multiple entries have the same frequency — the cache evicts the least recently added entry first. This behavior is achieved with the help of the `LinkedHashSet<K>` data structure, which maintains the insertion order of keys. This ensures that when there are entries with same frequency, the oldest is evicted first.
 
+### Time-based Invalidation
+
+The LFUCache implementates a time-based invalidation mechanism to automatically remove cache entries that have not been accessed or updated within a specified period of time. This time can be set in the constructor, or a default of 1 hour is used.
+
 ## Assumptions
 
 - The cache is designed for situations where access frequency is one of the main factors in data relevance
