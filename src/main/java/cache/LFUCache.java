@@ -128,8 +128,25 @@ public class LFUCache<K, V> implements Cache<K, V> {
 
     @Override
     public void remove(K key) {
-        // Remove the item from the cache by key
-        cache.remove(key);
+        if (cache.containsKey(key)) { // Sanity check
+            // Remove key from its frequency set
+            CacheEntry<K, V> entry = cache.get(key);
+            int freq = entry.frequency;
+            LinkedHashSet<K> set = frequencies.get(freq);
+            set.remove(key);
+
+            // If set is now empty, no keys have this frequency
+            if (set.isEmpty()) {
+                frequencies.remove(freq);
+                // If this freq was the minimum, find the next minimum frequency
+                if (freq == minFrequency) {
+                    minFrequency = findNextMinFrequency();  // Find new min frequency
+                }
+            }
+
+            // Remove the entry from the original cache
+            cache.remove(key);
+        }
     }
 
     @Override
