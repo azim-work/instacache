@@ -98,6 +98,24 @@ public class LFUCache<K, V> implements Cache<K, V> {
         addToFrequencyMap(entry.key, entry.frequency); // Add it to its new frequency set
     }
 
+    private void evict() {
+        LinkedHashSet<K> leastFreqKeys = frequencies.get(minFrequency);
+        // Sanity check
+        if (leastFreqKeys == null || leastFreqKeys.isEmpty()) {
+            return;
+        }
+
+        K toEvict = leastFreqKeys.iterator().next(); // Get the next key with this frequency
+        leastFreqKeys.remove(toEvict); // Remove it from it's now old frequency set
+        cache.remove(toEvict); // Remove the entry from the actual cache
+
+        // If set is now empty, no keys have this frequency
+        if (leastFreqKeys.isEmpty()) {
+            frequencies.remove(minFrequency); // So, remove this set
+            // TODO: find the next minFrequency if needed
+        }
+    }
+
     @Override
     public void remove(K key) {
         // Remove the item from the cache by key
