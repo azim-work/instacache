@@ -18,6 +18,9 @@ public class LFUCache<K, V> implements Cache<K, V> {
      * @param capacity the maximum number of entries the cache can hold
      */
     public LFUCache(int capacity) {
+        if (capacity < 0) {
+            throw new IllegalArgumentException("Cache capacity cannot be negative.");
+        }
         this.capacity = capacity;
         this.cache = new HashMap<>();
         this.frequencies = new HashMap<>();
