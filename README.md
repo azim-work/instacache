@@ -17,7 +17,7 @@ Quick access to source and tests:
 
 Quick demo of functionality:
 
-- `CacheTestRunner.java` offers a high-level demonstration of the functionalities of the LFU cache, showcasing how entries are managed and evicted based on access frequency.
+[CacheTestRunner.java](https://github.com/azimsb120/arctic-wolf-assignment/tree/master/src/main/java/cache/CacheTestRunner.java) offers a high-level demonstration of the functionalities of the LFU cache, showcasing how entries are managed and evicted based on access frequency.
 
 ## Project Structure
 
