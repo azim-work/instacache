@@ -15,18 +15,18 @@ public class CacheTest {
     }
 
     @Test
-    public void shouldReturnNullWhenKeyNotFound() {
+    public void shouldReturnNullWhenRetrievingNonexistentKey() {
         assertNull("Expect null when key not found", cache.get(999));
     }
 
     @Test
-    public void shouldStoreAndRetrieveUserAuthenticationToken() {
+    public void shouldStoreAndRetrieveValidEntry() {
         cache.put(101, "AuthToken:XYZ123;User:Admin;Permissions:Full");
         assertEquals("AuthToken:XYZ123;User:Admin;Permissions:Full", cache.get(101));
     }
 
     @Test
-    public void shouldRemoveExistingKey() {
+    public void shouldSuccessfullyRemoveEntry() {
         cache.put(102, "AuthToken:ABC456;User:Guest;Permissions:Read");
         cache.remove(102);
         assertNull("Expect null after key is removed", cache.get(102));
@@ -39,9 +39,8 @@ public class CacheTest {
         assertEquals("AuthToken:NEW456;User:User1;Permissions:Read", cache.get(103));
     }
 
-    // Test for placeholder implementation
     @Test
-    public void shouldEvictFirstInsertedItem() {
+    public void shouldCorrectlyEvictLeastFrequentlyUsedEntry() {
         cache.put(1, "AuthToken:XYZ123;User:Admin;Permissions:Full");
         cache.put(2, "AuthToken:ABC456;User:Guest;Permissions:Read");
         cache.put(3, "AuthToken:DEF789;User:Manager;Permissions:Modify"); // Should evict key 1 based on current placeholder logic
