@@ -98,6 +98,44 @@ public class CacheTest {
         assertNull("Data202 should be evicted as it has the least frequency", cache.get(202));
     }
 
+    /* Test Entry Expiration */
+
+    @Test
+    public void shouldExpireEntryAfterExpirationTimeLimit() throws InterruptedException {
+        LFUCache<Integer, String> cache = new LFUCache<>(2, 1000); // 1 second expiration time limit
+        cache.put(1, "Data");
+        Thread.sleep(2000); // Wait for 2 seconds, exceeding expiration time
+        assertNull("Entry should be expired", cache.get(1));
+    }
+
+    @Test
+    public void shouldNotExpireEntryBeforeExpirationTimeLimit() throws InterruptedException {
+        LFUCache<Integer, String> cache = new LFUCache<>(2, 3000); // 3 seconds expiration time limit
+        cache.put(1, "Data");
+        Thread.sleep(2000); // Wait for 2 seconds, not exceeding expiration time
+        assertNotNull("Entry should not be expired yet", cache.get(1));
+    }
+
+    @Test
+    public void shouldResetExpirationTimeOnAccess() throws InterruptedException {
+        LFUCache<Integer, String> cache = new LFUCache<>(2, 3000); // 3 seconds expiration time limit
+        cache.put(1, "Data");
+        Thread.sleep(2000); // Wait for 2 seconds
+        cache.get(1); // Access the entry
+        Thread.sleep(2000); // Wait for another 2 seconds
+        assertNotNull("Entry should not be expired after access", cache.get(1));
+    }
+
+    @Test
+    public void shouldResetExpirationTimeOnPut() throws InterruptedException {
+        LFUCache<Integer, String> cache = new LFUCache<>(2, 3000); // 3 seconds expiration time limit
+        cache.put(1, "OldData");
+        Thread.sleep(2000); // Wait for 2 seconds
+        cache.put(1, "NewData");
+        Thread.sleep(2000); // Wait for another 2 seconds
+        assertNotNull("Entry should not be expired after access", cache.get(1));
+    }
+
     /* Test Edge Cases */
     @Test
     public void shouldHandleNullValuesInserted() {
