@@ -38,19 +38,49 @@ public class LFUCache<K, V> implements Cache<K, V> {
 
     @Override
     public V get(K key) {
-        // Return the value for the key if it exists
-        return cache.get(key);
+        // Edge case: cache miss
+        if (!cache.containsKey(key)) {
+            return null;
+        }
+        CacheEntry<K, V> entry = cache.get(key);
+        updateFrequency(entry); // Increment the frequency count of this entry
+        return entry.value; // Return the value associated with the key from that entry
     }
 
     @Override
     public void put(K key, V value) {
-        if (cache.size() >= capacity && !cache.containsKey(key)) {
-            // Note: Implement eviction logic here
-            // Placeholder: Remove the first key
-            K firstKey = cache.keySet().iterator().next();
-            cache.remove(firstKey);
+        if (capacity == 0) {
+            return; // Edge case: initial capacity is 0
         }
-        cache.put(key, value);
+
+        // If key exists, update the value entry
+        if (cache.containsKey(key)) {
+            CacheEntry<K, V> entry = cache.get(key);
+            entry.value = value; // Update the value
+            updateFrequency(entry); // Increment the frequency of the entry
+            return;
+        }
+
+        // Cache is full, evict the Least Frequntly Used item
+        if (cache.size() == capacity) {
+            evict();
+        }
+
+        // New key, so create a new entry
+        CacheEntry<K, V> newEntry = new CacheEntry<>(key, value);
+        cache.put(key, newEntry);
+        addToFrequencyMap(key, 1);  // New keys have initial frequency of 1
+        minFrequency = 1; // Whenever there is a new entry, minimum frequency becomes 1
+    }
+
+    private void addToFrequencyMap(K key, int frequency) {
+        LinkedHashSet<K> set = frequencies.get(frequency);
+    // Create a new set for this frequency if it doesn't exist
+    if (set == null) {
+        set = new LinkedHashSet<>();
+        frequencies.put(frequency, set);
+    }
+    set.add(key); // Add the key to the set for this frequency
     }
 
     @Override
