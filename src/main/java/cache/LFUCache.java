@@ -13,11 +13,21 @@ public class LFUCache<K, V> implements Cache<K, V> {
     private Map<K, CacheEntry<K, V>> cache;    // Stores cache entries
     private Map<Integer, LinkedHashSet<K>> frequencies; // Maps frequency to keys with that frequency
     private int minFrequency; // Tracks the smallest frequency of a key in the cache
+    private static final long DEFAULT_EXPIRATION_TIME_LIMIT = 3600_000; // 1 hour in milliseconds
+    private final long expirationTimeLimit;
+
     /**
-     * Constructs an LFUCache with the specified capacity.
+     * Constructs an LFUCache with the specified capacity and expirationTimeLimit.
      * @param capacity the maximum number of entries the cache can hold
+     * @param expirationTimeLimit the number of seconds after which an entry should be invalidated
      */
-    public LFUCache(int capacity) {
+    public LFUCache(int capacity, long expirationTimeLimit) {
+        // Set expiration time
+        if (expirationTimeLimit <= 0) {
+            throw new IllegalArgumentException("Expiration time limit must be positive.");
+        }
+        this.expirationTimeLimit = expirationTimeLimit;
+
         if (capacity < 0) {
             throw new IllegalArgumentException("Cache capacity cannot be negative.");
         }
@@ -27,15 +37,25 @@ public class LFUCache<K, V> implements Cache<K, V> {
         this.minFrequency = 0;
     }
 
+    /**
+     * Constructs an LFUCache with the specified capacity and uses the default expirationTimeLimit.
+     * @param capacity the maximum number of entries the cache can hold
+     */
+    public LFUCache(int capacity) {
+        this(capacity, DEFAULT_EXPIRATION_TIME_LIMIT); // Use the default expiration time limit
+    }
+
     private static class CacheEntry<K, V> {
         K key;
         V value;
         int frequency;
+        long lastAccessTime;
 
         CacheEntry(K key, V value) {
             this.key = key;
             this.value = value;
             this.frequency = 1;
+            this.lastAccessTime = System.currentTimeMillis();
         }
     }
 
@@ -46,8 +66,19 @@ public class LFUCache<K, V> implements Cache<K, V> {
             return null;
         }
         CacheEntry<K, V> entry = cache.get(key);
+        if (isExpired(entry)) {
+            cache.remove(key);
+            frequencies.get(entry.frequency).remove(key);
+            return null;
+        }
+        entry.lastAccessTime = System.currentTimeMillis(); // Update the last access time
         updateFrequency(entry); // Increment the frequency count of this entry
         return entry.value; // Return the value associated with the key from that entry
+    }
+
+    private boolean isExpired(CacheEntry<K, V> entry) {
+        long currentTime = System.currentTimeMillis();
+        return (currentTime - entry.lastAccessTime) > this.expirationTimeLimit;
     }
 
     @Override
@@ -60,6 +91,7 @@ public class LFUCache<K, V> implements Cache<K, V> {
         if (cache.containsKey(key)) {
             CacheEntry<K, V> entry = cache.get(key);
             entry.value = value; // Update the value
+            entry.lastAccessTime = System.currentTimeMillis(); // Update the last access time
             updateFrequency(entry); // Increment the frequency of the entry
             return;
         }
