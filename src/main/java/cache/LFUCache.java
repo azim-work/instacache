@@ -24,6 +24,18 @@ public class LFUCache<K, V> implements Cache<K, V> {
         this.minFrequency = 0;
     }
 
+    private static class CacheEntry<K, V> {
+        K key;
+        V value;
+        int frequency;
+
+        CacheEntry(K key, V value) {
+            this.key = key;
+            this.value = value;
+            this.frequency = 1;
+        }
+    }
+
     @Override
     public V get(K key) {
         // Return the value for the key if it exists
