@@ -13,13 +13,13 @@ public class CacheTestRunner {
         cache.put(2, "Token:ABC456;User:Guest;Permissions:Read");
         cache.put(3, "Token:DEF789;User:Manager;Permissions:Write");
 
+        System.out.println("Updating token for an existing entry (Guest) to simulate real-time change...");
+        cache.put(2, "Token:ABC456;User:Guest;Permissions:All");
+
         // Access some entries to increment their frequency
         System.out.println("Accessing Token for Admin and Manager...");
         cache.get(1);
         cache.get(3);
-
-        System.out.println("Updating token for an existing entry (Guest) to simulate real-time change...");
-        cache.put(2, "Token:ABC456;User:Guest;Permissions:All");
 
         // Add another entry which should evict the least frequently used item
         System.out.println("Adding new entry for Developer, should trigger eviction...");
