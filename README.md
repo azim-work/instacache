@@ -1,12 +1,10 @@
 ## About
 
-This project is a coding assignment for the recruitment as a Software Developer at Arctic Wolf.
-
-Goal: Implementation of an in-memory data structure that acts as a cache.
+Implementation of an in-memory data structure that acts as a cache.
 
 Programming language: Java.
 
-## For the Hiring Manager/Recruiter
+## README.md
 
 This README.md provides comprehensive information on the project structure, implementation details, assumptions, imporvements, etc.
 
