@@ -1,8 +1,6 @@
-## About
+## Instacache
 
-Implementation of an in-memory data structure that acts as a cache.
-
-Programming language: Java.
+A high-performance in-memory cache in Java with LFU eviction, time-based expiry, and insertion-order tie-breaking.
 
 ## README.md
 
